@@ -7,146 +7,36 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>🍛 Taste of Home</h1>
-            <p class="tagline">Authentic Ghanaian Cuisine Made with Love</p>
-        </div>
-    </header>
+    <div id="partial-header"></div>
+    <div id="partial-hero"></div>
+    <div id="partial-main"></div>
+    <div id="partial-footer"></div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Homemade Delights for Friends & Family</h2>
-            <p>Experience the rich flavors of Ghana with our signature dishes, lovingly prepared in our home kitchen</p>
-        </div>
-    </section>
+    <script>
+        // Load header, hero, main and footer partials asynchronously and expose a promise
+        window.partialsLoaded = (async function() {
+            const parts = [
+                ['partial-header', 'header.html'],
+                ['partial-hero', 'hero.html'],
+                ['partial-main', 'main.html'],
+                ['partial-footer', 'footer.html']
+            ];
 
-    <div class="container">
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem; font-size: 2rem;">Our Signature Dishes</h2>
-        
-        <div class="menu-grid">
-            <div class="dish-card">
-                <div class="dish-image">
-                    <span class="emoji-icon">🍚</span>
-                </div>
-                <div class="dish-content">
-                    <h3>Jollof Rice</h3>
-                    <p>Our famous Jollof rice, perfectly seasoned with rich tomato sauce and aromatic spices. A true West African classic!</p>
-                    <p class="price">From £12.00</p>
-                </div>
-            </div>
-
-            <div class="dish-card">
-                <div class="dish-image">
-                    <span class="emoji-icon">🍛</span>
-                </div>
-                <div class="dish-content">
-                    <h3>Waakye</h3>
-                    <p>Traditional rice and beans cooked to perfection with millet leaves, giving it a distinctive flavor and color.</p>
-                    <p class="price">From £12.00</p>
-                </div>
-            </div>
-
-            <div class="dish-card">
-                <div class="dish-image">
-                    <span class="emoji-icon">🍜</span>
-                </div>
-                <div class="dish-content">
-                    <h3>Special Fried Rice</h3>
-                    <p>Our house special fried rice, loaded with vegetables and savory goodness. A crowd favorite!</p>
-                    <p class="price">From £12.00</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="included-items">
-            <h4>🎁 Every Dish Comes With:</h4>
-            <p><strong>✓</strong> Our Special Homemade Shito (Included FREE!)</p>
-        </div>
-
-        <section class="order-section">
-            <h2>📝 Place Your Order</h2>
-            
-            <form id="orderForm">
-                <div class="form-group">
-                    <label for="name">Your Name *</label>
-                    <input type="text" id="name" name="name" required placeholder="Enter your name">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email Address *</label>
-                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="07XXX XXXXXX">
-                </div>
-
-                <div class="form-group">
-                    <label for="dish">Choose Your Dish *</label>
-                    <select id="dish" name="dish" required>
-                        <option value="">-- Select a dish --</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="portion">Portion Size *</label>
-                    <select id="portion" name="portion" required>
-                        <option value="">-- Select portion --</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="toppingsGroup" style="display: none;">
-                    <label>Choose Your Protein Toppings (Select multiple) - For Fried Rice Only</label>
-                    <div class="toppings-grid">
-                    </div>
-                </div>
-
-                <div class="form-group" id="extrasGroup" style="display: none;">
-                    <label>Add Extras (Optional)</label>
-                    <div class="toppings-grid">
-                    </div>
-                </div>
-
-                <div class="form-group" id="drinksGroup" style="display: none;">
-                    <label>Add a Drink (Optional)</label>
-                    <select id="drink" name="drink">
-                        <option value="">-- No drink --</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="dessertGroup" style="display: none;">
-                    <label>Add a Dessert (Optional)</label>
-                    <select id="dessert" name="dessert">
-                        <option value="">-- No dessert --</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="delivery-date">Preferred Delivery/Pickup Date *</label>
-                    <input type="date" id="delivery-date" name="delivery-date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="notes">Special Instructions (Optional)</label>
-                    <textarea id="notes" name="notes" rows="4" placeholder="Any dietary requirements or special requests?"></textarea>
-                </div>
-
-                <div class="order-summary" id="orderSummary" style="display: none;">
-                    <h3>Order Summary</h3>
-                    <div id="summaryContent"></div>
-                </div>
-
-                <button type="submit">🛒 Place Order</button>
-            </form>
-        </section>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Taste of Home - Authentic Ghanaian Cuisine</p>
-        <p>Made with ❤️ for friends and family</p>
-    </footer>
+            await Promise.all(parts.map(async ([id, url]) => {
+                try {
+                    const res = await fetch(url);
+                    if (!res.ok) throw new Error('Failed to load ' + url + ': ' + res.status);
+                    const html = await res.text();
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = html;
+                } catch (e) {
+                    console.error(e);
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = '';
+                }
+            }));
+        })();
+    </script>
 
     <div class="modal" id="successModal">
         <div class="modal-content">
@@ -160,8 +50,13 @@
         let menuData = {};
         let form, orderSummary, summaryContent, modal;
 
-        // Initialize after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize after DOM is loaded and partials have been inserted
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for partials (header/hero/main/footer) to load if they haven't yet
+            try {
+                if (window.partialsLoaded) await window.partialsLoaded;
+            } catch (e) { console.warn('partials load error:', e); }
+
             console.log('DOM loaded');
             form = document.getElementById('orderForm');
             orderSummary = document.getElementById('orderSummary');
