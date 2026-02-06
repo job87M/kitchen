@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste of Home - Authentic Ghanaian Cuisine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #d4534f;
+            --primary-dark: #b23a36;
+            --secondary: #f4a261;
+            --dark: #2b2d42;
+            --light: #edf2f4;
+            --white: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(212, 83, 79, 0.95), rgba(178, 58, 54, 0.95)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f4a261" width="1200" height="600"/><circle fill="%23d4534f" opacity="0.3" cx="200" cy="150" r="120"/><circle fill="%23d4534f" opacity="0.3" cx="800" cy="400" r="150"/><circle fill="%23d4534f" opacity="0.3" cx="1000" cy="200" r="100"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Menu Section */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dish-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .dish-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dish-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .dish-content {
+            padding: 1.5rem;
+        }
+
+        .dish-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dish-content p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        /* Order Form */
+        .order-section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px var(--shadow);
+            margin-top: 3rem;
+        }
+
+        .order-section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .toppings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .topping-option {
+            position: relative;
+        }
+
+        .topping-option input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .topping-label {
+            display: block;
+            padding: 1rem;
+            background: var(--light);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .topping-option input[type="checkbox"]:checked + .topping-label {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .topping-label:hover {
+            border-color: var(--primary);
+        }
+
+        .included-items {
+            background: #f0f7ff;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .included-items h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(212, 83, 79, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 2px dashed var(--primary);
+        }
+
+        .order-summary h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+
+        .close-modal {
+            background: var(--secondary);
+            padding: 0.75rem 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toppings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .emoji-icon {
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🍛 Taste of Home</h1>
+            <p class="tagline">Authentic Ghanaian Cuisine Made with Love</p>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Homemade Delights for Friends & Family</h2>
+            <p>Experience the rich flavors of Ghana with our signature dishes, lovingly prepared in our home kitchen</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 2rem; font-size: 2rem;">Our Signature Dishes</h2>
+        
+        <div class="menu-grid">
+            <div class="dish-card">
+                <div class="dish-image">
+                    <span class="emoji-icon">🍚</span>
+                </div>
+                <div class="dish-content">
+                    <h3>Jollof Rice</h3>
+                    <p>Our famous Jollof rice, perfectly seasoned with rich tomato sauce and aromatic spices. A true West African classic!</p>
+                    <p class="price">From £12.00</p>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="dish-image">
+                    <span class="emoji-icon">🍛</span>
+                </div>
+                <div class="dish-content">
+                    <h3>Waakye</h3>
+                    <p>Traditional rice and beans cooked to perfection with millet leaves, giving it a distinctive flavor and color.</p>
+                    <p class="price">From £12.00</p>
+                </div>
+            </div>
+
+            <div class="dish-card">
+                <div class="dish-image">
+                    <span class="emoji-icon">🍜</span>
+                </div>
+                <div class="dish-content">
+                    <h3>Special Fried Rice</h3>
+                    <p>Our house special fried rice, loaded with vegetables and savory goodness. A crowd favorite!</p>
+                    <p class="price">From £12.00</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="included-items">
+            <h4>🎁 Every Dish Comes With:</h4>
+            <p><strong>✓</strong> Our Special Homemade Shito (Included FREE!)</p>
+        </div>
+
+        <section class="order-section">
+            <h2>📝 Place Your Order</h2>
+            
+            <form id="orderForm">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="Enter your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="07XXX XXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label for="dish">Choose Your Dish *</label>
+                    <select id="dish" name="dish" required>
+                        <option value="">-- Select a dish --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="portion">Portion Size *</label>
+                    <select id="portion" name="portion" required>
+                        <option value="">-- Select portion --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="toppingsGroup" style="display: none;">
+                    <label>Choose Your Protein Toppings (Select multiple) - For Fried Rice Only</label>
+                    <div class="toppings-grid">
+                    </div>
+                </div>
+
+                <div class="form-group" id="extrasGroup" style="display: none;">
+                    <label>Add Extras (Optional)</label>
+                    <div class="toppings-grid">
+                    </div>
+                </div>
+
+                <div class="form-group" id="drinksGroup" style="display: none;">
+                    <label>Add a Drink (Optional)</label>
+                    <select id="drink" name="drink">
+                        <option value="">-- No drink --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="dessertGroup" style="display: none;">
+                    <label>Add a Dessert (Optional)</label>
+                    <select id="dessert" name="dessert">
+                        <option value="">-- No dessert --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="delivery-date">Preferred Delivery/Pickup Date *</label>
+                    <input type="date" id="delivery-date" name="delivery-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Special Instructions (Optional)</label>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Any dietary requirements or special requests?"></textarea>
+                </div>
+
+                <div class="order-summary" id="orderSummary" style="display: none;">
+                    <h3>Order Summary</h3>
+                    <div id="summaryContent"></div>
+                </div>
+
+                <button type="submit">🛒 Place Order</button>
+            </form>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Taste of Home - Authentic Ghanaian Cuisine</p>
+        <p>Made with ❤️ for friends and family</p>
+    </footer>
+
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <h3>🎉 Order Received!</h3>
+            <p>Thank you for your order! We'll be in touch soon to confirm the details.</p>
+            <button class="close-modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let menuData = {};
+        let form, orderSummary, summaryContent, modal;
+
+        // Initialize after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            form = document.getElementById('orderForm');
+            orderSummary = document.getElementById('orderSummary');
+            summaryContent = document.getElementById('summaryContent');
+            modal = document.getElementById('successModal');
+
+            console.log('Form element:', form);
+            console.log('Order summary:', orderSummary);
+
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+
+            // Set minimum date to today
+            const dateInput = document.getElementById('delivery-date');
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
+
+            // Load menu data
+            loadMenuData();
+        });
+
+        // Load menu data - using hardcoded data for reliability
+        function loadMenuData() {
+            console.log('=== LOADING MENU DATA ===');
+            
+            // Use hardcoded data directly (XML loading can be added later for production)
+            menuData = {
+                dishes: [
+                    { id: 'jollof', name: 'Jollof Rice', description: 'Our famous Jollof rice', emoji: '🍚', price: 12.00, allowToppings: false },
+                    { id: 'waakye', name: 'Waakye', description: 'Traditional rice and beans', emoji: '🍛', price: 12.00, allowToppings: false },
+                    { id: 'fried-rice', name: 'Special Fried Rice', description: 'Our house special', emoji: '🍜', price: 12.00, allowToppings: true }
+                ],
+                portions: {
+                    regular: { name: 'Regular', price: 12.00 },
+                    large: { name: 'Large', price: 16.00 },
+                    family: { name: 'Family Size (Serves 4)', price: 45.00 }
+                },
+                toppings: {
+                    beef: { name: 'Beef', emoji: '🥩', price: 3.00 },
+                    pork: { name: 'Pork', emoji: '🐷', price: 3.00 },
+                    duck: { name: 'Duck', emoji: '🦆', price: 4.00 },
+                    prawns: { name: 'Prawns', emoji: '🦐', price: 5.00 },
+                    chicken: { name: 'Chicken', emoji: '🍗', price: 3.00 }
+                },
+                extras: {
+                    spareribs: { name: 'Spare Ribs', emoji: '🍖', price: 4.00 },
+                    salad: { name: 'Fresh Salad', emoji: '🥗', price: 2.50 }
+                },
+                drinks: {
+                    coke: { name: 'Coca-Cola', price: 1.50 },
+                    sprite: { name: 'Sprite', price: 1.50 },
+                    fanta: { name: 'Fanta', price: 1.50 },
+                    water: { name: 'Bottled Water', price: 1.00 },
+                    juice: { name: 'Fruit Juice', price: 2.00 },
+                    malta: { name: 'Malta Guinness', price: 2.50 }
+                },
+                desserts: {
+                    'chin-chin': { name: 'Chin Chin', price: 3.00 },
+                    'puff-puff': { name: 'Puff Puff', price: 3.50 },
+                    plantain: { name: 'Sweet Plantain', price: 2.50 },
+                    bofrot: { name: 'Bofrot (African Donuts)', price: 3.00 }
+                }
+            };
+            
+            console.log('Menu data loaded:', menuData);
+            console.log('Dishes count:', menuData.dishes.length);
+            populateMenuUI();
+            setupEventListeners();
+        }
+
+        // Populate the UI with menu data
+        function populateMenuUI() {
+            console.log('=== POPULATE MENU UI CALLED ===');
+            console.log('Populating menu UI...');
+            console.log('Menu data:', menuData);
+            
+            alert('populateMenuUI called! Dishes: ' + menuData.dishes.length);
+            
+            // Populate dish dropdown
+            const dishSelect = document.getElementById('dish');
+            console.log('Dish select element:', dishSelect);
+            console.log('Current dish options:', dishSelect.options.length);
+            
+            menuData.dishes.forEach(dish => {
+                const option = document.createElement('option');
+                option.value = dish.id;
+                option.textContent = `${dish.name} - £${dish.price.toFixed(2)}`;
+                dishSelect.appendChild(option);
+                console.log('Added dish option:', dish.name);
+            });
+            console.log('Dishes added:', menuData.dishes.length);
+            console.log('Final dish options:', dishSelect.options.length);
+
+            // Populate portion dropdown
+            const portionSelect = document.getElementById('portion');
+            Object.keys(menuData.portions).forEach(key => {
+                const portion = menuData.portions[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${portion.name} - £${portion.price.toFixed(2)}`;
+                portionSelect.appendChild(option);
+            });
+            console.log('Portions added:', Object.keys(menuData.portions).length);
+
+            // Populate toppings
+            const toppingsGrid = document.querySelector('#toppingsGroup .toppings-grid');
+            Object.keys(menuData.toppings).forEach(key => {
+                const topping = menuData.toppings[key];
+                const div = document.createElement('div');
+                div.className = 'topping-option';
+                div.innerHTML = `
+                    <input type="checkbox" id="${key}" name="toppings" value="${key}">
+                    <label for="${key}" class="topping-label">${topping.emoji} ${topping.name}<br>+£${topping.price.toFixed(2)}</label>
+                `;
+                toppingsGrid.appendChild(div);
+            });
+
+            // Populate extras
+            const extrasGrid = document.querySelector('#extrasGroup .toppings-grid');
+            Object.keys(menuData.extras).forEach(key => {
+                const extra = menuData.extras[key];
+                const div = document.createElement('div');
+                div.className = 'topping-option';
+                div.innerHTML = `
+                    <input type="checkbox" id="${key}" name="extras" value="${key}">
+                    <label for="${key}" class="topping-label">${extra.emoji} ${extra.name}<br>+£${extra.price.toFixed(2)}</label>
+                `;
+                extrasGrid.appendChild(div);
+            });
+
+            // Populate drinks
+            const drinkSelect = document.getElementById('drink');
+            Object.keys(menuData.drinks).forEach(key => {
+                const drink = menuData.drinks[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${drink.name} - £${drink.price.toFixed(2)}`;
+                drinkSelect.appendChild(option);
+            });
+
+            // Populate desserts
+            const dessertSelect = document.getElementById('dessert');
+            Object.keys(menuData.desserts).forEach(key => {
+                const dessert = menuData.desserts[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${dessert.name} - £${dessert.price.toFixed(2)}`;
+                dessertSelect.appendChild(option);
+            });
+            
+            console.log('=== MENU UI POPULATION COMPLETE ===');
+        }
+
+        // Load menu data from XML
+        async function loadMenuData() {
+            try {
+                const response = await fetch('menu.xml');
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                // Parse dishes
+                menuData.dishes = Array.from(xmlDoc.querySelectorAll('dishes > dish')).map(dish => ({
+                    id: dish.querySelector('id').textContent,
+                    name: dish.querySelector('n').textContent,
+                    description: dish.querySelector('description').textContent,
+                    emoji: dish.querySelector('emoji').textContent,
+                    price: parseFloat(dish.querySelector('base_price').textContent),
+                    allowToppings: dish.querySelector('allow_toppings').textContent === 'true'
+                }));
+
+                // Parse portions
+                menuData.portions = {};
+                xmlDoc.querySelectorAll('portions > portion').forEach(portion => {
+                    const id = portion.querySelector('id').textContent;
+                    menuData.portions[id] = {
+                        name: portion.querySelector('n').textContent,
+                        price: parseFloat(portion.querySelector('price').textContent)
+                    };
+                });
+
+                // Parse toppings
+                menuData.toppings = {};
+                xmlDoc.querySelectorAll('toppings > topping').forEach(topping => {
+                    const id = topping.querySelector('id').textContent;
+                    menuData.toppings[id] = {
+                        name: topping.querySelector('n').textContent,
+                        emoji: topping.querySelector('emoji').textContent,
+                        price: parseFloat(topping.querySelector('price').textContent)
+                    };
+                });
+
+                // Parse extras
+                menuData.extras = {};
+                xmlDoc.querySelectorAll('extras > extra').forEach(extra => {
+                    const id = extra.querySelector('id').textContent;
+                    menuData.extras[id] = {
+                        name: extra.querySelector('n').textContent,
+                        emoji: extra.querySelector('emoji').textContent,
+                        price: parseFloat(extra.querySelector('price').textContent)
+                    };
+                });
+
+                // Parse drinks
+                menuData.drinks = {};
+                xmlDoc.querySelectorAll('drinks > drink').forEach(drink => {
+                    const id = drink.querySelector('id').textContent;
+                    menuData.drinks[id] = {
+                        name: drink.querySelector('n').textContent,
+                        price: parseFloat(drink.querySelector('price').textContent)
+                    };
+                });
+
+                // Parse desserts
+                menuData.desserts = {};
+                xmlDoc.querySelectorAll('desserts > dessert').forEach(dessert => {
+                    const id = dessert.querySelector('id').textContent;
+                    menuData.desserts[id] = {
+                        name: dessert.querySelector('n').textContent,
+                        price: parseFloat(dessert.querySelector('price').textContent)
+                    };
+                });
+
+                populateMenuUI();
+            } catch (error) {
+                console.error('Error loading menu data:', error);
+                alert('Failed to load menu. Please refresh the page.');
+            }
+        }
+
+        // Populate the UI with menu data
+        function populateMenuUI() {
+            // Populate dish dropdown
+            const dishSelect = document.getElementById('dish');
+            menuData.dishes.forEach(dish => {
+                const option = document.createElement('option');
+                option.value = dish.id;
+                option.textContent = `${dish.name} - £${dish.price.toFixed(2)}`;
+                dishSelect.appendChild(option);
+            });
+
+            // Populate portion dropdown
+            const portionSelect = document.getElementById('portion');
+            Object.keys(menuData.portions).forEach(key => {
+                const portion = menuData.portions[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${portion.name} - £${portion.price.toFixed(2)}`;
+                portionSelect.appendChild(option);
+            });
+
+            // Populate toppings
+            const toppingsGrid = document.querySelector('#toppingsGroup .toppings-grid');
+            toppingsGrid.innerHTML = '';
+            Object.keys(menuData.toppings).forEach(key => {
+                const topping = menuData.toppings[key];
+                const div = document.createElement('div');
+                div.className = 'topping-option';
+                div.innerHTML = `
+                    <input type="checkbox" id="${key}" name="toppings" value="${key}">
+                    <label for="${key}" class="topping-label">${topping.emoji} ${topping.name}<br>+£${topping.price.toFixed(2)}</label>
+                `;
+                toppingsGrid.appendChild(div);
+            });
+
+            // Populate extras
+            const extrasGrid = document.querySelector('#extrasGroup .toppings-grid');
+            extrasGrid.innerHTML = '';
+            Object.keys(menuData.extras).forEach(key => {
+                const extra = menuData.extras[key];
+                const div = document.createElement('div');
+                div.className = 'topping-option';
+                div.innerHTML = `
+                    <input type="checkbox" id="${key}" name="extras" value="${key}">
+                    <label for="${key}" class="topping-label">${extra.emoji} ${extra.name}<br>+£${extra.price.toFixed(2)}</label>
+                `;
+                extrasGrid.appendChild(div);
+            });
+
+            // Populate drinks
+            const drinkSelect = document.getElementById('drink');
+            Object.keys(menuData.drinks).forEach(key => {
+                const drink = menuData.drinks[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${drink.name} - £${drink.price.toFixed(2)}`;
+                drinkSelect.appendChild(option);
+            });
+
+            // Populate desserts
+            const dessertSelect = document.getElementById('dessert');
+            Object.keys(menuData.desserts).forEach(key => {
+                const dessert = menuData.desserts[key];
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${dessert.name} - £${dessert.price.toFixed(2)}`;
+                dessertSelect.appendChild(option);
+            });
+        }
+
+        function setupEventListeners() {
+            console.log('Setting up event listeners');
+            console.log('Form in setupEventListeners:', form);
+            console.log('Type of form:', typeof form);
+            
+            if (!form) {
+                console.error('Form is undefined in setupEventListeners!');
+                return;
+            }
+
+            try {
+                // Update summary when inputs change
+                console.log('Adding change listener to form...');
+                form.addEventListener('change', updateSummary);
+                console.log('Change listener added successfully');
+
+                // Show/hide sections based on dish selection
+                const dishSelect = document.getElementById('dish');
+                console.log('Dish select element:', dishSelect);
+                
+                dishSelect.addEventListener('change', function() {
+                    const selectedDish = this.value;
+                    const toppingsGroup = document.getElementById('toppingsGroup');
+                    const extrasGroup = document.getElementById('extrasGroup');
+                    const drinksGroup = document.getElementById('drinksGroup');
+                    const dessertGroup = document.getElementById('dessertGroup');
+
+                    if (selectedDish) {
+                        // Show extras, drinks, and desserts for any dish
+                        extrasGroup.style.display = 'block';
+                        drinksGroup.style.display = 'block';
+                        dessertGroup.style.display = 'block';
+
+                        // Check if this dish allows toppings
+                        const dish = menuData.dishes.find(d => d.id === selectedDish);
+                        if (dish && dish.allowToppings) {
+                            toppingsGroup.style.display = 'block';
+                        } else {
+                            toppingsGroup.style.display = 'none';
+                            // Uncheck all toppings if switching away from fried rice
+                            document.querySelectorAll('input[name="toppings"]').forEach(cb => cb.checked = false);
+                        }
+                    } else {
+                        // Hide all optional sections if no dish selected
+                        toppingsGroup.style.display = 'none';
+                        extrasGroup.style.display = 'none';
+                        drinksGroup.style.display = 'none';
+                        dessertGroup.style.display = 'none';
+                    }
+                    
+                    updateSummary();
+                });
+
+                // Handle form submission
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Show success modal
+                    modal.classList.add('active');
+                    
+                    // Reset form after a delay
+                    setTimeout(() => {
+                        form.reset();
+                        orderSummary.style.display = 'none';
+                    }, 500);
+                });
+                
+                console.log('Event listeners set up successfully');
+            } catch (error) {
+                console.error('Error in setupEventListeners:', error);
+                console.error('Error stack:', error.stack);
+            }
+        }
+
+        function updateSummary() {
+            const dish = document.getElementById('dish').value;
+            const portion = document.getElementById('portion').value;
+            const selectedToppings = Array.from(document.querySelectorAll('input[name="toppings"]:checked'))
+                .map(el => el.value);
+            const selectedExtras = Array.from(document.querySelectorAll('input[name="extras"]:checked'))
+                .map(el => el.value);
+            const selectedDrink = document.getElementById('drink').value;
+            const selectedDessert = document.getElementById('dessert').value;
+
+            if (!dish || !portion) {
+                orderSummary.style.display = 'none';
+                return;
+            }
+
+            let total = menuData.portions[portion].price;
+            let toppingsTotal = 0;
+            let extrasTotal = 0;
+            let drinkPrice = 0;
+            let dessertPrice = 0;
+
+            selectedToppings.forEach(topping => {
+                toppingsTotal += menuData.toppings[topping].price;
+            });
+
+            selectedExtras.forEach(extra => {
+                extrasTotal += menuData.extras[extra].price;
+            });
+
+            if (selectedDrink) {
+                drinkPrice = menuData.drinks[selectedDrink].price;
+            }
+
+            if (selectedDessert) {
+                dessertPrice = menuData.desserts[selectedDessert].price;
+            }
+
+            total += toppingsTotal + extrasTotal + drinkPrice + dessertPrice;
+
+            const dishData = menuData.dishes.find(d => d.id === dish);
+            const portionData = menuData.portions[portion];
+
+            let summaryHTML = `
+                <div class="summary-item">
+                    <span>Dish:</span>
+                    <span>${dishData.name}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Portion:</span>
+                    <span>${portionData.name}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Base Price:</span>
+                    <span>£${portionData.price.toFixed(2)}</span>
+                </div>
+            `;
+
+            if (selectedToppings.length > 0) {
+                const toppingNames = selectedToppings.map(t => menuData.toppings[t].name).join(', ');
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>Protein Toppings:</span>
+                        <span>${toppingNames}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Toppings Cost:</span>
+                        <span>£${toppingsTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            if (selectedExtras.length > 0) {
+                const extraNames = selectedExtras.map(e => menuData.extras[e].name).join(', ');
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>Extras:</span>
+                        <span>${extraNames}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Extras Cost:</span>
+                        <span>£${extrasTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            if (selectedDrink) {
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>Drink:</span>
+                        <span>${menuData.drinks[selectedDrink].name} - £${drinkPrice.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            if (selectedDessert) {
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>Dessert:</span>
+                        <span>${menuData.desserts[selectedDessert].name} - £${dessertPrice.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            summaryHTML += `
+                <div class="summary-item">
+                    <span>Includes Free:</span>
+                    <span>Homemade Shito</span>
+                </div>
+                <div class="summary-item">
+                    <span>Total:</span>
+                    <span>£${total.toFixed(2)}</span>
+                </div>
+            `;
+
+            summaryContent.innerHTML = summaryHTML;
+            orderSummary.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

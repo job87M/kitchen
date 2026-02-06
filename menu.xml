@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <dishes>
+        <dish>
+            <id>jollof</id>
+            <name>Jollof Rice</name>
+            <description>Our famous Jollof rice, perfectly seasoned with rich tomato sauce and aromatic spices. A true West African classic!</description>
+            <emoji>🍚</emoji>
+            <base_price>12.00</base_price>
+            <allow_toppings>false</allow_toppings>
+        </dish>
+        <dish>
+            <id>waakye</id>
+            <name>Waakye</name>
+            <description>Traditional rice and beans cooked to perfection with millet leaves, giving it a distinctive flavor and color.</description>
+            <emoji>🍛</emoji>
+            <base_price>12.00</base_price>
+            <allow_toppings>false</allow_toppings>
+        </dish>
+        <dish>
+            <id>fried-rice</id>
+            <name>Special Fried Rice</name>
+            <description>Our house special fried rice, loaded with vegetables and savory goodness. A crowd favorite!</description>
+            <emoji>🍜</emoji>
+            <base_price>12.00</base_price>
+            <allow_toppings>true</allow_toppings>
+        </dish>
+    </dishes>
+
+    <portions>
+        <portion>
+            <id>regular</id>
+            <name>Regular</name>
+            <price>12.00</price>
+        </portion>
+        <portion>
+            <id>large</id>
+            <name>Large</name>
+            <price>16.00</price>
+        </portion>
+        <portion>
+            <id>family</id>
+            <name>Family Size (Serves 4)</name>
+            <price>45.00</price>
+        </portion>
+    </portions>
+
+    <toppings>
+        <topping>
+            <id>beef</id>
+            <name>Beef</name>
+            <emoji>🥩</emoji>
+            <price>3.00</price>
+        </topping>
+        <topping>
+            <id>pork</id>
+            <name>Pork</name>
+            <emoji>🐷</emoji>
+            <price>3.00</price>
+        </topping>
+        <topping>
+            <id>duck</id>
+            <name>Duck</name>
+            <emoji>🦆</emoji>
+            <price>4.00</price>
+        </topping>
+        <topping>
+            <id>prawns</id>
+            <name>Prawns</name>
+            <emoji>🦐</emoji>
+            <price>5.00</price>
+        </topping>
+        <topping>
+            <id>chicken</id>
+            <name>Chicken</name>
+            <emoji>🍗</emoji>
+            <price>3.00</price>
+        </topping>
+    </toppings>
+
+    <extras>
+        <extra>
+            <id>spareribs</id>
+            <name>Spare Ribs</name>
+            <emoji>🍖</emoji>
+            <price>4.00</price>
+        </extra>
+        <extra>
+            <id>salad</id>
+            <name>Fresh Salad</name>
+            <emoji>🥗</emoji>
+            <price>2.50</price>
+        </extra>
+    </extras>
+
+    <drinks>
+        <drink>
+            <id>coke</id>
+            <name>Coca-Cola</name>
+            <price>1.50</price>
+        </drink>
+        <drink>
+            <id>sprite</id>
+            <name>Sprite</name>
+            <price>1.50</price>
+        </drink>
+        <drink>
+            <id>fanta</id>
+            <name>Fanta</name>
+            <price>1.50</price>
+        </drink>
+        <drink>
+            <id>water</id>
+            <name>Bottled Water</name>
+            <price>1.00</price>
+        </drink>
+        <drink>
+            <id>juice</id>
+            <name>Fruit Juice</name>
+            <price>2.00</price>
+        </drink>
+        <drink>
+            <id>malta</id>
+            <name>Malta Guinness</name>
+            <price>2.50</price>
+        </drink>
+    </drinks>
+
+    <desserts>
+        <dessert>
+            <id>chin-chin</id>
+            <name>Chin Chin</name>
+            <price>3.00</price>
+        </dessert>
+        <dessert>
+            <id>puff-puff</id>
+            <name>Puff Puff</name>
+            <price>3.50</price>
+        </dessert>
+        <dessert>
+            <id>plantain</id>
+            <name>Sweet Plantain</name>
+            <price>2.50</price>
+        </dessert>
+        <dessert>
+            <id>bofrot</id>
+            <name>Bofrot (African Donuts)</name>
+            <price>3.00</price>
+        </dessert>
+    </desserts>
+
+    <included_items>
+        <item>
+            <name>Our Special Homemade Shito</name>
+            <price>0.00</price>
+        </item>
+    </included_items>
+</menu>
