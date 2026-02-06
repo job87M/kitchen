@@ -598,7 +598,7 @@
                     // Parse dishes
                     menuData.dishes = Array.from(xmlDoc.querySelectorAll('dishes > dish')).map(dish => ({
                         id: dish.querySelector('id').textContent,
-                        name: dish.querySelector('n').textContent,
+                        name: dish.querySelector('name').textContent,
                         description: dish.querySelector('description').textContent,
                         emoji: dish.querySelector('emoji').textContent,
                         price: parseFloat(dish.querySelector('base_price').textContent),
@@ -610,7 +610,7 @@
                     xmlDoc.querySelectorAll('portions > portion').forEach(portion => {
                         const id = portion.querySelector('id').textContent;
                         menuData.portions[id] = {
-                            name: portion.querySelector('n').textContent,
+                            name: portion.querySelector('name').textContent,
                             price: parseFloat(portion.querySelector('price').textContent)
                         };
                     });
@@ -620,7 +620,7 @@
                     xmlDoc.querySelectorAll('toppings > topping').forEach(topping => {
                         const id = topping.querySelector('id').textContent;
                         menuData.toppings[id] = {
-                            name: topping.querySelector('n').textContent,
+                            name: topping.querySelector('name').textContent,
                             emoji: topping.querySelector('emoji').textContent,
                             price: parseFloat(topping.querySelector('price').textContent)
                         };
@@ -631,7 +631,7 @@
                     xmlDoc.querySelectorAll('extras > extra').forEach(extra => {
                         const id = extra.querySelector('id').textContent;
                         menuData.extras[id] = {
-                            name: extra.querySelector('n').textContent,
+                            name: extra.querySelector('name').textContent,
                             emoji: extra.querySelector('emoji').textContent,
                             price: parseFloat(extra.querySelector('price').textContent)
                         };
@@ -642,7 +642,7 @@
                     xmlDoc.querySelectorAll('drinks > drink').forEach(drink => {
                         const id = drink.querySelector('id').textContent;
                         menuData.drinks[id] = {
-                            name: drink.querySelector('n').textContent,
+                            name: drink.querySelector('name').textContent,
                             price: parseFloat(drink.querySelector('price').textContent)
                         };
                     });
@@ -652,7 +652,7 @@
                     xmlDoc.querySelectorAll('desserts > dessert').forEach(dessert => {
                         const id = dessert.querySelector('id').textContent;
                         menuData.desserts[id] = {
-                            name: dessert.querySelector('n').textContent,
+                            name: dessert.querySelector('name').textContent,
                             price: parseFloat(dessert.querySelector('price').textContent)
                         };
                     });
@@ -744,10 +744,16 @@
 
             // Populate toppings
             const toppingsGrid = document.querySelector('#toppingsGroup .toppings-grid');
+            // When rendering toppings, mark stew toppings as waakye-only and protein toppings as fried-rice-only
+            const waakyeOnly = new Set(['gammon', 'chicken-stew', 'goat-stew', 'beef-stew']);
+            const friedRiceOnly = new Set(['beef', 'pork', 'duck', 'prawns', 'chicken']);
             Object.keys(menuData.toppings).forEach(key => {
                 const topping = menuData.toppings[key];
                 const div = document.createElement('div');
                 div.className = 'topping-option';
+                if (waakyeOnly.has(key)) div.dataset.dishes = 'waakye';
+                else if (friedRiceOnly.has(key)) div.dataset.dishes = 'fried-rice';
+                else div.dataset.dishes = 'all';
                 div.innerHTML = `
                     <input type="checkbox" id="${key}" name="toppings" value="${key}">
                     <label for="${key}" class="topping-label">${topping.emoji} ${topping.name}<br>+£${topping.price.toFixed(2)}</label>
@@ -802,7 +808,7 @@
                 // Parse dishes
                 menuData.dishes = Array.from(xmlDoc.querySelectorAll('dishes > dish')).map(dish => ({
                     id: dish.querySelector('id').textContent,
-                    name: dish.querySelector('n').textContent,
+                    name: dish.querySelector('name').textContent,
                     description: dish.querySelector('description').textContent,
                     emoji: dish.querySelector('emoji').textContent,
                     price: parseFloat(dish.querySelector('base_price').textContent),
@@ -814,7 +820,7 @@
                 xmlDoc.querySelectorAll('portions > portion').forEach(portion => {
                     const id = portion.querySelector('id').textContent;
                     menuData.portions[id] = {
-                        name: portion.querySelector('n').textContent,
+                        name: portion.querySelector('name').textContent,
                         price: parseFloat(portion.querySelector('price').textContent)
                     };
                 });
@@ -824,7 +830,7 @@
                 xmlDoc.querySelectorAll('toppings > topping').forEach(topping => {
                     const id = topping.querySelector('id').textContent;
                     menuData.toppings[id] = {
-                        name: topping.querySelector('n').textContent,
+                        name: topping.querySelector('name').textContent,
                         emoji: topping.querySelector('emoji').textContent,
                         price: parseFloat(topping.querySelector('price').textContent)
                     };
@@ -835,7 +841,7 @@
                 xmlDoc.querySelectorAll('extras > extra').forEach(extra => {
                     const id = extra.querySelector('id').textContent;
                     menuData.extras[id] = {
-                        name: extra.querySelector('n').textContent,
+                        name: extra.querySelector('name').textContent,
                         emoji: extra.querySelector('emoji').textContent,
                         price: parseFloat(extra.querySelector('price').textContent)
                     };
@@ -846,7 +852,7 @@
                 xmlDoc.querySelectorAll('drinks > drink').forEach(drink => {
                     const id = drink.querySelector('id').textContent;
                     menuData.drinks[id] = {
-                        name: drink.querySelector('n').textContent,
+                        name: drink.querySelector('name').textContent,
                         price: parseFloat(drink.querySelector('price').textContent)
                     };
                 });
@@ -856,87 +862,47 @@
                 xmlDoc.querySelectorAll('desserts > dessert').forEach(dessert => {
                     const id = dessert.querySelector('id').textContent;
                     menuData.desserts[id] = {
-                        name: dessert.querySelector('n').textContent,
+                        name: dessert.querySelector('name').textContent,
                         price: parseFloat(dessert.querySelector('price').textContent)
                     };
                 });
 
                 populateMenuUI();
+                // Ensure event listeners are attached (in case this function was overridden earlier)
+                if (typeof setupEventListeners === 'function') {
+                    try { setupEventListeners(); } catch (e) { console.error('setupEventListeners error:', e); }
+                }
+
+                // Auto-select the first dish so optional sections (extras/drinks/desserts/toppings) appear
+                try {
+                    if (menuData.dishes && menuData.dishes.length > 0) {
+                        // Prefer 'fried-rice' as the default selected dish if available
+                        const preferred = menuData.dishes.find(d => d.id === 'fried-rice');
+                        const firstDishId = preferred ? preferred.id : menuData.dishes[0].id;
+                        const dishSelectEl = document.getElementById('dish');
+                        if (dishSelectEl) {
+                            dishSelectEl.value = firstDishId;
+                            dishSelectEl.dispatchEvent(new Event('change'));
+                        }
+                    }
+                } catch (e) { console.error('Auto-select dish error:', e); }
             } catch (error) {
                 console.error('Error loading menu data:', error);
                 alert('Failed to load menu. Please refresh the page.');
             }
         }
 
-        // Populate the UI with menu data
-        function populateMenuUI() {
-            // Populate dish dropdown
-            const dishSelect = document.getElementById('dish');
-            menuData.dishes.forEach(dish => {
-                const option = document.createElement('option');
-                option.value = dish.id;
-                option.textContent = `${dish.name} - £${dish.price.toFixed(2)}`;
-                dishSelect.appendChild(option);
-            });
+        // (duplicate populateMenuUI removed; the primary populateMenuUI defined earlier is used)
 
-            // Populate portion dropdown
-            const portionSelect = document.getElementById('portion');
-            Object.keys(menuData.portions).forEach(key => {
-                const portion = menuData.portions[key];
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = `${portion.name} - £${portion.price.toFixed(2)}`;
-                portionSelect.appendChild(option);
-            });
-
-            // Populate toppings
-            const toppingsGrid = document.querySelector('#toppingsGroup .toppings-grid');
-            toppingsGrid.innerHTML = '';
-            Object.keys(menuData.toppings).forEach(key => {
-                const topping = menuData.toppings[key];
-                const div = document.createElement('div');
-                div.className = 'topping-option';
-                div.innerHTML = `
-                    <input type="checkbox" id="${key}" name="toppings" value="${key}">
-                    <label for="${key}" class="topping-label">${topping.emoji} ${topping.name}<br>+£${topping.price.toFixed(2)}</label>
-                `;
-                toppingsGrid.appendChild(div);
-            });
-
-            // Populate extras
-            const extrasGrid = document.querySelector('#extrasGroup .toppings-grid');
-            extrasGrid.innerHTML = '';
-            Object.keys(menuData.extras).forEach(key => {
-                const extra = menuData.extras[key];
-                const div = document.createElement('div');
-                div.className = 'topping-option';
-                div.innerHTML = `
-                    <input type="checkbox" id="${key}" name="extras" value="${key}">
-                    <label for="${key}" class="topping-label">${extra.emoji} ${extra.name}<br>+£${extra.price.toFixed(2)}</label>
-                `;
-                extrasGrid.appendChild(div);
-            });
-
-            // Populate drinks
-            const drinkSelect = document.getElementById('drink');
-            Object.keys(menuData.drinks).forEach(key => {
-                const drink = menuData.drinks[key];
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = `${drink.name} - £${drink.price.toFixed(2)}`;
-                drinkSelect.appendChild(option);
-            });
-
-            // Populate desserts
-            const dessertSelect = document.getElementById('dessert');
-            Object.keys(menuData.desserts).forEach(key => {
-                const dessert = menuData.desserts[key];
-                const option = document.createElement('option');
-                option.value = key;
-                option.textContent = `${dessert.name} - £${dessert.price.toFixed(2)}`;
-                dessertSelect.appendChild(option);
-            });
+        // Return default included toppings for a dish (free with the dish)
+        function getDefaultIncludedToppingsForDish(dishId) {
+            if (!dishId) return [];
+            // For now only fried-rice includes pork and prawns by default
+            if (dishId === 'fried-rice') return ['pork', 'prawns'];
+            return [];
         }
+
+        // (Intentionally left no portion-price adjustment here)
 
         function setupEventListeners() {
             console.log('Setting up event listeners');
@@ -975,10 +941,30 @@
                         const dish = menuData.dishes.find(d => d.id === selectedDish);
                         if (dish && dish.allowToppings) {
                             toppingsGroup.style.display = 'block';
+
+                            // Show/hide individual topping options depending on which dish(s) they apply to
+                            document.querySelectorAll('#toppingsGroup .topping-option').forEach(div => {
+                                const avail = div.dataset.dishes || 'all';
+                                if (avail === 'all' || avail.split(',').includes(selectedDish)) {
+                                    div.style.display = '';
+                                } else {
+                                    // hide toppings not available for this dish and uncheck them
+                                    div.style.display = 'none';
+                                    const cb = div.querySelector('input[name="toppings"]');
+                                    if (cb) cb.checked = false;
+                                }
+                            });
+
+                            // If fried-rice is selected, pre-check pork and prawns by default
+                            if (selectedDish === 'fried-rice') {
+                                document.querySelectorAll('#toppingsGroup input[name="toppings"]').forEach(cb => {
+                                    if (cb.id === 'pork' || cb.id === 'prawns') cb.checked = true;
+                                });
+                            }
                         } else {
                             toppingsGroup.style.display = 'none';
-                            // Uncheck all toppings if switching away from fried rice
-                            document.querySelectorAll('input[name="toppings"]').forEach(cb => cb.checked = false);
+                            // Uncheck all toppings if switching away from a toppings-enabled dish
+                            document.querySelectorAll('#toppingsGroup input[name="toppings"]').forEach(cb => cb.checked = false);
                         }
                     } else {
                         // Hide all optional sections if no dish selected
@@ -988,13 +974,51 @@
                         dessertGroup.style.display = 'none';
                     }
                     
+                    // No portion label changes; update summary to reflect any default toppings removed
                     updateSummary();
                 });
 
                 // Handle form submission
                 form.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    
+
+                    // If selected dish requires toppings (fried-rice) ensure at least one topping is chosen
+                    const dishSelect = document.getElementById('dish');
+                    const selectedDishId = dishSelect ? dishSelect.value : null;
+                    const dishObj = menuData.dishes ? menuData.dishes.find(d => d.id === selectedDishId) : null;
+                    const requiresToppings = dishObj && dishObj.allowToppings;
+
+                    if (requiresToppings) {
+                        const checked = document.querySelectorAll('#toppingsGroup input[name="toppings"]:checked').length;
+                        if (checked === 0) {
+                            // show inline validation message under toppingsGroup
+                            const toppingsGroup = document.getElementById('toppingsGroup');
+                            if (toppingsGroup) {
+                                let msg = toppingsGroup.querySelector('.validation-msg');
+                                if (!msg) {
+                                    msg = document.createElement('div');
+                                    msg.className = 'validation-msg';
+                                    msg.style.color = '#b23a36';
+                                    msg.style.marginTop = '0.75rem';
+                                    msg.style.fontWeight = '600';
+                                    toppingsGroup.appendChild(msg);
+                                }
+                                msg.textContent = 'Please select at least one protein topping for Special Fried Rice.';
+                                // focus the first topping checkbox if available
+                                const firstCheckbox = toppingsGroup.querySelector('input[name="toppings"]');
+                                if (firstCheckbox) firstCheckbox.focus();
+                            }
+                            return; // prevent submission
+                        }
+                    }
+
+                    // Clear any validation message
+                    const toppingsGroup = document.getElementById('toppingsGroup');
+                    if (toppingsGroup) {
+                        const msg = toppingsGroup.querySelector('.validation-msg');
+                        if (msg) msg.remove();
+                    }
+
                     // Show success modal
                     modal.classList.add('active');
                     
@@ -1027,14 +1051,34 @@
                 return;
             }
 
-            let total = menuData.portions[portion].price;
+            // Clear toppings validation message if user selected toppings or dish doesn't require toppings
+            try {
+                const toppingsGroup = document.getElementById('toppingsGroup');
+                if (toppingsGroup) {
+                    const msg = toppingsGroup.querySelector('.validation-msg');
+                    if (msg && (selectedToppings.length > 0 || dish !== 'fried-rice')) {
+                        msg.remove();
+                    }
+                }
+            } catch (e) { /* ignore */ }
+
+            // Determine default included toppings for this dish
+            const defaultIncluded = getDefaultIncludedToppingsForDish(dish);
+
+            // Base portion price (full)
+            const portionFullPrice = menuData.portions[portion].price;
+
+            let total = portionFullPrice;
             let toppingsTotal = 0;
             let extrasTotal = 0;
             let drinkPrice = 0;
             let dessertPrice = 0;
 
+            // Only charge for toppings that are not included by default
             selectedToppings.forEach(topping => {
-                toppingsTotal += menuData.toppings[topping].price;
+                if (!defaultIncluded.includes(topping)) {
+                    toppingsTotal += menuData.toppings[topping].price;
+                }
             });
 
             selectedExtras.forEach(extra => {
@@ -1048,6 +1092,16 @@
             if (selectedDessert) {
                 dessertPrice = menuData.desserts[selectedDessert].price;
             }
+
+            // Subtract any default toppings that the user has explicitly UNCHECKED
+            const removedDefaults = defaultIncluded.filter(id => !selectedToppings.includes(id));
+            let removedDefaultsTotal = 0;
+            removedDefaults.forEach(id => {
+                if (menuData.toppings[id]) {
+                    removedDefaultsTotal += menuData.toppings[id].price;
+                    total -= menuData.toppings[id].price;
+                }
+            });
 
             total += toppingsTotal + extrasTotal + drinkPrice + dessertPrice;
 
@@ -1065,22 +1119,45 @@
                 </div>
                 <div class="summary-item">
                     <span>Base Price:</span>
-                    <span>£${portionData.price.toFixed(2)}</span>
+                    <span>£${portionFullPrice.toFixed(2)}</span>
                 </div>
             `;
 
             if (selectedToppings.length > 0) {
-                const toppingNames = selectedToppings.map(t => menuData.toppings[t].name).join(', ');
-                summaryHTML += `
-                    <div class="summary-item">
-                        <span>Protein Toppings:</span>
-                        <span>${toppingNames}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Toppings Cost:</span>
-                        <span>£${toppingsTotal.toFixed(2)}</span>
-                    </div>
-                `;
+                const included = selectedToppings.filter(t => defaultIncluded.includes(t)).map(t => menuData.toppings[t].name);
+                const paid = selectedToppings.filter(t => !defaultIncluded.includes(t)).map(t => menuData.toppings[t].name);
+
+                if (included.length > 0) {
+                    summaryHTML += `
+                        <div class="summary-item">
+                            <span>Included Proteins:</span>
+                            <span>${included.join(', ')}</span>
+                        </div>
+                    `;
+                }
+
+                if (removedDefaults.length > 0) {
+                    const removedNames = removedDefaults.map(id => menuData.toppings[id] ? menuData.toppings[id].name : id).join(', ');
+                    summaryHTML += `
+                        <div class="summary-item">
+                            <span>Removed Proteins:</span>
+                            <span>-${removedNames} - £${removedDefaultsTotal.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                if (paid.length > 0) {
+                    summaryHTML += `
+                        <div class="summary-item">
+                            <span>Protein Toppings:</span>
+                            <span>${paid.join(', ')}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Toppings Cost:</span>
+                            <span>£${toppingsTotal.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
             }
 
             if (selectedExtras.length > 0) {

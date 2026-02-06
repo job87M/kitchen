@@ -15,11 +15,11 @@
             <description>Traditional rice and beans cooked to perfection with millet leaves, giving it a distinctive flavor and color.</description>
             <emoji>🍛</emoji>
             <base_price>12.00</base_price>
-            <allow_toppings>false</allow_toppings>
+            <allow_toppings>true</allow_toppings>
         </dish>
         <dish>
             <id>fried-rice</id>
-            <name>Special Fried Rice</name>
+            <name>House Fried Rice</name>
             <description>Our house special fried rice, loaded with vegetables and savory goodness. A crowd favorite!</description>
             <emoji>🍜</emoji>
             <base_price>12.00</base_price>
@@ -50,31 +50,55 @@
             <id>beef</id>
             <name>Beef</name>
             <emoji>🥩</emoji>
-            <price>3.00</price>
+            <price>1.00</price>
         </topping>
         <topping>
             <id>pork</id>
             <name>Pork</name>
             <emoji>🐷</emoji>
-            <price>3.00</price>
+            <price>0.50</price>
         </topping>
         <topping>
             <id>duck</id>
             <name>Duck</name>
             <emoji>🦆</emoji>
-            <price>4.00</price>
+            <price>3.00</price>
         </topping>
         <topping>
             <id>prawns</id>
             <name>Prawns</name>
             <emoji>🦐</emoji>
-            <price>5.00</price>
+            <price>0.50</price>
         </topping>
         <topping>
             <id>chicken</id>
             <name>Chicken</name>
             <emoji>🍗</emoji>
+            <price>1.00</price>
+        </topping>
+        <topping>
+            <id>gammon-stew</id>
+            <name>Gammon Stew</name>
+            <emoji>🥓</emoji>
             <price>3.00</price>
+        </topping>
+        <topping>
+            <id>chicken-stew</id>
+            <name>Chicken Stew</name>
+            <emoji>🍗</emoji>
+            <price>3.00</price>
+        </topping>
+        <topping>
+            <id>goat-stew</id>
+            <name>Goat Stew</name>
+            <emoji>🐐</emoji>
+            <price>4.00</price>
+        </topping>
+        <topping>
+            <id>beef-stew</id>
+            <name>Beef Stew</name>
+            <emoji>🥩</emoji>
+            <price>4.00</price>
         </topping>
     </toppings>
 
@@ -83,12 +107,18 @@
             <id>spareribs</id>
             <name>Spare Ribs</name>
             <emoji>🍖</emoji>
-            <price>4.00</price>
+            <price>7.00</price>
         </extra>
         <extra>
             <id>salad</id>
-            <name>Fresh Salad</name>
+            <name>House Salad</name>
             <emoji>🥗</emoji>
+            <price>2.50</price>
+        </extra>
+          <extra>
+            <id>shito</id>
+            <name>Extra Jar of Shito</name>
+            <emoji>🌶️</emoji>
             <price>2.50</price>
         </extra>
     </extras>
@@ -121,7 +151,7 @@
         </drink>
         <drink>
             <id>malta</id>
-            <name>Malta Guinness</name>
+            <name>SuperMalt</name>
             <price>2.50</price>
         </drink>
     </drinks>
@@ -133,18 +163,23 @@
             <price>3.00</price>
         </dessert>
         <dessert>
-            <id>puff-puff</id>
-            <name>Puff Puff</name>
+            <id>meat-pie</id>
+            <name>Meat Pie</name>
             <price>3.50</price>
         </dessert>
         <dessert>
-            <id>plantain</id>
-            <name>Sweet Plantain</name>
+            <id>icecream</id>
+            <name>Haagen Daz Icecream</name>
             <price>2.50</price>
         </dessert>
         <dessert>
             <id>bofrot</id>
-            <name>Bofrot (African Donuts)</name>
+            <name>Bofrot (Puff puff)</name>
+            <price>3.00</price>
+        </dessert>
+         <dessert>
+            <id>bread</id>
+            <name>Sugar bread</name>
             <price>3.00</price>
         </dessert>
     </desserts>
