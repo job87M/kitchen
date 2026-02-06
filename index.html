@@ -573,48 +573,136 @@
             loadMenuData();
         });
 
-        // Load menu data - using hardcoded data for reliability
-        function loadMenuData() {
+        // Load menu data - tries XML first, falls back to hardcoded data
+        async function loadMenuData() {
             console.log('=== LOADING MENU DATA ===');
             
-            // Use hardcoded data directly (XML loading can be added later for production)
-            menuData = {
-                dishes: [
-                    { id: 'jollof', name: 'Jollof Rice', description: 'Our famous Jollof rice', emoji: '🍚', price: 12.00, allowToppings: false },
-                    { id: 'waakye', name: 'Waakye', description: 'Traditional rice and beans', emoji: '🍛', price: 12.00, allowToppings: false },
-                    { id: 'fried-rice', name: 'Special Fried Rice', description: 'Our house special', emoji: '🍜', price: 12.00, allowToppings: true }
-                ],
-                portions: {
-                    regular: { name: 'Regular', price: 12.00 },
-                    large: { name: 'Large', price: 16.00 },
-                    family: { name: 'Family Size (Serves 4)', price: 45.00 }
-                },
-                toppings: {
-                    beef: { name: 'Beef', emoji: '🥩', price: 3.00 },
-                    pork: { name: 'Pork', emoji: '🐷', price: 3.00 },
-                    duck: { name: 'Duck', emoji: '🦆', price: 4.00 },
-                    prawns: { name: 'Prawns', emoji: '🦐', price: 5.00 },
-                    chicken: { name: 'Chicken', emoji: '🍗', price: 3.00 }
-                },
-                extras: {
-                    spareribs: { name: 'Spare Ribs', emoji: '🍖', price: 4.00 },
-                    salad: { name: 'Fresh Salad', emoji: '🥗', price: 2.50 }
-                },
-                drinks: {
-                    coke: { name: 'Coca-Cola', price: 1.50 },
-                    sprite: { name: 'Sprite', price: 1.50 },
-                    fanta: { name: 'Fanta', price: 1.50 },
-                    water: { name: 'Bottled Water', price: 1.00 },
-                    juice: { name: 'Fruit Juice', price: 2.00 },
-                    malta: { name: 'Malta Guinness', price: 2.50 }
-                },
-                desserts: {
-                    'chin-chin': { name: 'Chin Chin', price: 3.00 },
-                    'puff-puff': { name: 'Puff Puff', price: 3.50 },
-                    plantain: { name: 'Sweet Plantain', price: 2.50 },
-                    bofrot: { name: 'Bofrot (African Donuts)', price: 3.00 }
+            // Try to load from XML first
+            try {
+                console.log('Attempting to load menu.xml...');
+                const response = await fetch('menu.xml');
+                
+                if (response.ok) {
+                    const xmlText = await response.text();
+                    console.log('XML loaded, length:', xmlText.length);
+                    
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                    // Check for parsing errors
+                    const parserError = xmlDoc.querySelector('parsererror');
+                    if (parserError) {
+                        throw new Error('XML parsing error');
+                    }
+
+                    // Parse dishes
+                    menuData.dishes = Array.from(xmlDoc.querySelectorAll('dishes > dish')).map(dish => ({
+                        id: dish.querySelector('id').textContent,
+                        name: dish.querySelector('n').textContent,
+                        description: dish.querySelector('description').textContent,
+                        emoji: dish.querySelector('emoji').textContent,
+                        price: parseFloat(dish.querySelector('base_price').textContent),
+                        allowToppings: dish.querySelector('allow_toppings').textContent === 'true'
+                    }));
+
+                    // Parse portions
+                    menuData.portions = {};
+                    xmlDoc.querySelectorAll('portions > portion').forEach(portion => {
+                        const id = portion.querySelector('id').textContent;
+                        menuData.portions[id] = {
+                            name: portion.querySelector('n').textContent,
+                            price: parseFloat(portion.querySelector('price').textContent)
+                        };
+                    });
+
+                    // Parse toppings
+                    menuData.toppings = {};
+                    xmlDoc.querySelectorAll('toppings > topping').forEach(topping => {
+                        const id = topping.querySelector('id').textContent;
+                        menuData.toppings[id] = {
+                            name: topping.querySelector('n').textContent,
+                            emoji: topping.querySelector('emoji').textContent,
+                            price: parseFloat(topping.querySelector('price').textContent)
+                        };
+                    });
+
+                    // Parse extras
+                    menuData.extras = {};
+                    xmlDoc.querySelectorAll('extras > extra').forEach(extra => {
+                        const id = extra.querySelector('id').textContent;
+                        menuData.extras[id] = {
+                            name: extra.querySelector('n').textContent,
+                            emoji: extra.querySelector('emoji').textContent,
+                            price: parseFloat(extra.querySelector('price').textContent)
+                        };
+                    });
+
+                    // Parse drinks
+                    menuData.drinks = {};
+                    xmlDoc.querySelectorAll('drinks > drink').forEach(drink => {
+                        const id = drink.querySelector('id').textContent;
+                        menuData.drinks[id] = {
+                            name: drink.querySelector('n').textContent,
+                            price: parseFloat(drink.querySelector('price').textContent)
+                        };
+                    });
+
+                    // Parse desserts
+                    menuData.desserts = {};
+                    xmlDoc.querySelectorAll('desserts > dessert').forEach(dessert => {
+                        const id = dessert.querySelector('id').textContent;
+                        menuData.desserts[id] = {
+                            name: dessert.querySelector('n').textContent,
+                            price: parseFloat(dessert.querySelector('price').textContent)
+                        };
+                    });
+
+                    console.log('XML parsed successfully from menu.xml');
+                } else {
+                    throw new Error('Failed to fetch menu.xml');
                 }
-            };
+            } catch (error) {
+                console.log('XML loading failed, using hardcoded data:', error.message);
+                
+                // Fallback to hardcoded data (silent fallback, no alert)
+                menuData = {
+                    dishes: [
+                        { id: 'jollof', name: 'Jollof Rice', description: 'Our famous Jollof rice', emoji: '🍚', price: 12.00, allowToppings: false },
+                        { id: 'waakye', name: 'Waakye', description: 'Traditional rice and beans', emoji: '🍛', price: 12.00, allowToppings: false },
+                        { id: 'fried-rice', name: 'Special Fried Rice', description: 'Our house special', emoji: '🍜', price: 12.00, allowToppings: true }
+                    ],
+                    portions: {
+                        regular: { name: 'Regular', price: 12.00 },
+                        large: { name: 'Large', price: 16.00 },
+                        family: { name: 'Family Size (Serves 4)', price: 45.00 }
+                    },
+                    toppings: {
+                        beef: { name: 'Beef', emoji: '🥩', price: 3.00 },
+                        pork: { name: 'Pork', emoji: '🐷', price: 3.00 },
+                        duck: { name: 'Duck', emoji: '🦆', price: 4.00 },
+                        prawns: { name: 'Prawns', emoji: '🦐', price: 5.00 },
+                        chicken: { name: 'Chicken', emoji: '🍗', price: 3.00 }
+                    },
+                    extras: {
+                        spareribs: { name: 'Spare Ribs', emoji: '🍖', price: 4.00 },
+                        salad: { name: 'Fresh Salad', emoji: '🥗', price: 2.50 }
+                    },
+                    drinks: {
+                        coke: { name: 'Coca-Cola', price: 1.50 },
+                        sprite: { name: 'Sprite', price: 1.50 },
+                        fanta: { name: 'Fanta', price: 1.50 },
+                        water: { name: 'Bottled Water', price: 1.00 },
+                        juice: { name: 'Fruit Juice', price: 2.00 },
+                        malta: { name: 'Malta Guinness', price: 2.50 }
+                    },
+                    desserts: {
+                        'chin-chin': { name: 'Chin Chin', price: 3.00 },
+                        'puff-puff': { name: 'Puff Puff', price: 3.50 },
+                        plantain: { name: 'Sweet Plantain', price: 2.50 },
+                        bofrot: { name: 'Bofrot (African Donuts)', price: 3.00 }
+                    }
+                };
+            }
             
             console.log('Menu data loaded:', menuData);
             console.log('Dishes count:', menuData.dishes.length);
@@ -627,8 +715,6 @@
             console.log('=== POPULATE MENU UI CALLED ===');
             console.log('Populating menu UI...');
             console.log('Menu data:', menuData);
-            
-            alert('populateMenuUI called! Dishes: ' + menuData.dishes.length);
             
             // Populate dish dropdown
             const dishSelect = document.getElementById('dish');
